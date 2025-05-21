@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<style>
+    .main-footer {
+    background-color: var(--dark-bg-color); /* Using a darker background for the footer */
+    color: var(--light-bg-color);
+    padding: 30px 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px; /* Provides some space above the footer */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.logo-image-footer {
+    height: 35px; /* Slightly smaller than header logo */
+    width: auto;
+    border-radius: 50%;
+}
+
+.credwise-text-footer {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--light-bg-color);
+}
+
+.main-footer p {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Allows links to wrap on smaller screens */
+    justify-content: center;
+}
+
+.footer-links a {
+    color: var(--light-bg-color);
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
+}
+
+.footer-links .separator {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+}
+</style>
+<body>
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo-section">
+                <img src="path/to/your/logo.png" alt="CredWise Logo" class="logo-image">
+                <span class="credwise-text">CredWise</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#apply">Apply</a></li>
+                    <li><a href="#application-status">Application Status</a></li>
+                    <li><a href="#kyc-update">KYC Update</a></li>
+                    <li><a href="#statements">Statements</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="profile-dropdown">
+                <i class="fas fa-user-circle profile-icon"></i> <div class="dropdown-content">
+                    <a href="#view-profile">View Profile</a>
+                    <a href="#logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    Body 
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="path/to/your/logo.png" alt="CredWise Logo" class="logo-image-footer">
+                <span class="credwise-text-footer">CredWise</span>
+            </div>
+            <p>&copy; 2025 CredWise. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#privacy">Privacy Policy</a>
+                <span class="separator">|</span>
+                <a href="#terms">Terms of Service</a>
+                <span class="separator">|</span>
+                <a href="#contact">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

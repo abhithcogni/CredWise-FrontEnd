@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application - MyBank</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Consistent background */
+        }
+
+        /* Sidebar Styles - Adapted for consistency */
+        #sidebar-wrapper {
+            min-height: 100vh;
+            margin-left: -16rem;
+            transition: margin .25s ease-out;
+            background-color: #ffffff;
+            border-right: 1px solid #dee2e6;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            padding: 1.5rem 1.25rem;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #0d6efd;
+            border-bottom: 1px solid #e9ecef;
+        }
+        #sidebar-wrapper .sidebar-heading i {
+            margin-right: 0.5rem;
+        }
+
+        #sidebar-wrapper .list-group-item {
+            padding: 1rem 1.25rem;
+            border: none;
+            color: #495057;
+            background-color: #ffffff;
+            font-weight: 500;
+        }
+
+        #sidebar-wrapper .list-group-item:hover,
+        #sidebar-wrapper .list-group-item.active {
+            color: #0d6efd;
+            background-color: #e9f5ff;
+            border-left: 4px solid #0d6efd;
+            font-weight: 600;
+        }
+        
+        #sidebar-wrapper .list-group-item i {
+            margin-right: 0.85rem;
+            width: 20px;
+            text-align: center;
+            color: #6c757d;
+        }
+        #sidebar-wrapper .list-group-item.active i,
+        #sidebar-wrapper .list-group-item:hover i {
+            color: #0d6efd;
+        }
+
+        #page-content-wrapper {
+            min-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        #wrapper.toggled #page-content-wrapper {
+            min-width: 0;
+            width: 100%;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .05);
+        }
+        #menu-toggle {
+            color: #0d6efd;
+        }
+        #menu-toggle:focus {
+            box-shadow: none; /* Remove focus outline for cleaner look */
+        }
+
+
+        /* Card Styles for the form container */
+        .card-form-container {
+            border: 1px solid #e9ecef;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .04);
+            background-color: #ffffff; /* White background for the form card */
+        }
+        .card-form-container .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 600;
+            color: #343a40;
+            font-size: 1.25rem; /* Slightly larger header for the form title */
+            padding: 1rem 1.5rem;
+        }
+         .card-form-container .card-header i {
+            margin-right: 0.5rem;
+        }
+        .card-form-container .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form specific styles */
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+        .form-control, .form-select {
+            border-radius: 0.375rem; /* Standard Bootstrap 5 radius */
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe; /* Bootstrap focus color */
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef; /* Standard readonly background */
+            opacity: 1;
+        }
+        .input-group-text {
+             background-color: #e9ecef;
+             border-right: none;
+        }
+        .form-control.no-left-border {
+            border-left: none;
+        }
+
+
+        /* Button Styles */
+        .btn-primary { /* Using Bootstrap primary for submit */
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+         .btn-primary i {
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #ffffff;
+            padding: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+            margin-top: auto; /* Pushes footer to the bottom */
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+            }
+            #page-content-wrapper {
+                min-width: 0;
+                width: 100%;
+            }
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -16rem;
+            }
+        }
+         @media (max-width: 767.98px) {
+            .card-form-container .card-header {
+                font-size: 1.1rem;
+            }
+             #sidebar-wrapper { /* Keep sidebar hidden by default on small screens */
+                margin-left: -16rem;
+            }
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: 0; /* Show when toggled */
+            }
+            .navbar-brand-custom {
+                font-size: 1.2rem; /* Adjust if navbar brand is used */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="fas fa-university"></i>MyBank
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action"> 
+                    <i class="fas fa-home"></i>Overview
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-invoice-dollar"></i>My Loans
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-history"></i>Payment History
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-credit-card"></i>Make a Payment
+                </a>
+                <a href="@Url.Action("LApplication", "Customer")" class="list-group-item list-group-item-action active"> <i class="fas fa-hand-holding-usd"></i>Apply for Loan
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user-circle"></i>Profile
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope"></i>Messages <span class="badge bg-danger float-end mt-1">2</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-headset"></i>Support
+                </a>
+            </div>
+            <div class="p-3 mt-auto"> 
+                <a href="#" class="btn btn-outline-secondary w-100"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light border-bottom sticky-top">
+                <div class="container-fluid">
+                    <button class="btn btn-link text-decoration-none" id="menu-toggle">
+                        <i class="fas fa-bars fs-4"></i>
+                    </button>
+                     <a class="navbar-brand-custom fw-bold ms-2" href="#">Loan Application</a> <div class="ms-auto d-flex align-items-center">
+                        <a class="nav-link me-3 notification-bell position-relative" href="#" title="Notifications">
+                            <i class="fas fa-bell fs-5 text-secondary"></i>
+                            <span class="badge rounded-pill bg-danger" style="font-size: 0.6em; padding: 0.3em 0.5em; position: absolute; top: -5px; right: -5px;">3</span>
+                        </a>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://placehold.co/32x32/0D6EFD/white?text=JD" class="rounded-circle me-2" alt="User Avatar" style="width: 32px; height: 32px;">
+                                <span class="d-none d-sm-inline">John Doe</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt me-2"></i>Security Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="container-fluid p-4 flex-grow-1">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="card-form-container">
+                            <div class="card-header">
+                                <i class="fas fa-file-alt"></i> Apply for a Loan
+                            </div>
+                            <div class="card-body">
+                                <form id="loanApplicationForm" action="@Url.Action("LApplicationStatus", "Customer")">
+                                    <div class="mb-3">
+                                        <label for="customerId" class="form-label"><i class="fas fa-id-card me-2 text-secondary"></i>Customer ID:</label>
+                                        <input type="text" class="form-control" id="customerId" name="customerId" required placeholder="Enter your Customer ID">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="loanProductName" class="form-label"><i class="fas fa-piggy-bank me-2 text-secondary"></i>Loan Product Name:</label>
+                                        <select class="form-select" id="loanProductName" name="loanProductName" required>
+                                            <option value="" disabled selected>Select a loan product</option>
+                                            <option value="Personal Loan">Personal Loan</option>
+                                            <option value="Housing Loan">Housing Loan</option>
+                                            <option value="Gold Loan">Gold Loan</option>
+                                            <option value="Vehicle Loan">Vehicle Loan</option> </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="interestRate" class="form-label"><i class="fas fa-percentage me-2 text-secondary"></i>Interest Rate (%):</label>
+                                        <div class="input-group">
+                                             <span class="input-group-text"><i class="fas fa-percent"></i></span>
+                                            <input type="number" class="form-control no-left-border" id="interestRate" name="interestRate" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="loanAmount" class="form-label"><i class="fas fa-dollar-sign me-2 text-secondary"></i>Loan Amount:</label>
+                                         <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-coins"></i></span>
+                                            <input type="number" class="form-control no-left-border" id="loanAmount" name="loanAmount" required placeholder="Enter desired loan amount">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="tenure" class="form-label"><i class="far fa-calendar-alt me-2 text-secondary"></i>Tenure (months):</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-hourglass-half"></i></span>
+                                            <input type="number" class="form-control no-left-border" id="tenure" name="tenure" required placeholder="Enter tenure in months">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="totalAmount" class="form-label"><i class="fas fa-calculator me-2 text-secondary"></i>Total Amount (Approx.):</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-equals"></i></span>
+                                            <input type="number" class="form-control no-left-border" id="totalAmount" name="totalAmount" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-paper-plane"></i>Submit Application
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="footer text-center">
+                <div class="container">
+                    <span>&copy; @DateTime.Now.Year MyBank. Member FDIC. Equal Housing Lender.</span>
+                    <div class="mt-2">
+                        <a href="#" class="text-muted small me-2">Privacy Policy</a>
+                        <a href="#" class="text-muted small me-2">Terms of Service</a>
+                        <a href="#" class="text-muted small">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+            </div>
+        </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Sidebar Toggle
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+
+            // Active Sidebar Link Handling (basic, for visual consistency if navigating)
+            $('#sidebar-wrapper .list-group-item').on('click', function(e) {
+                // If it's a real link, let it navigate. If it's '#', manage active state.
+                if ($(this).attr('href') === '#') {
+                    e.preventDefault();
+                }
+                $('#sidebar-wrapper .list-group-item.active').removeClass('active');
+                $(this).addClass('active');
+
+                // Optionally update page title based on sidebar item
+                // let pageTitle = $(this).text().trim().split('\n')[0]; // Get text before potential badge
+                // $('.navbar-brand-custom').text(pageTitle); 
+            });
+
+
+            // Loan Application Logic
+            $('#loanProductName').change(function() {
+                const interestRateField = $('#interestRate');
+                switch ($(this).val()) {
+                    case 'Personal Loan':
+                        interestRateField.val(5);
+                        break;
+                    case 'Housing Loan':
+                        interestRateField.val(8);
+                        break;
+                    case 'Gold Loan':
+                        interestRateField.val(10);
+                        break;
+                    case 'Vehicle Loan': // Corrected typo
+                        interestRateField.val(12);
+                        break;    
+                    default:
+                        interestRateField.val('');
+                }
+                calculateTotalAmount();
+            });
+
+            $('#loanAmount, #tenure').on('input', calculateTotalAmount);
+
+            function calculateTotalAmount() {
+                const loanAmount = parseFloat($('#loanAmount').val()) || 0;
+                const interestRate = parseFloat($('#interestRate').val()) || 0;
+                const tenure = parseFloat($('#tenure').val()) || 0;
+
+                // Simple interest calculation: A = P(1 + rt)
+                // P = Principal amount
+                // r = Annual interest rate
+                // t = Tenure in years
+                // Here, tenure is in months, so t = tenure / 12
+                // Interest rate is given as percentage, so divide by 100
+                // Total Amount = P + (P * r * t) = P * (1 + r * t)
+                // For monthly rate: P * (1 + (rate_per_month * tenure_in_months))
+                // Or, for annual rate: P * (1 + (annual_rate / 100 * tenure_in_months / 12))
+
+                if (loanAmount > 0 && interestRate > 0 && tenure > 0) {
+                    // Using the formula: LoanAmount * (1 + (InterestRate * TenureInYears) / 100)
+                    // TenureInYears = tenure / 12
+                    const totalAmount = loanAmount * (1 + (interestRate / 100) * (tenure / 12));
+                    // Or if the rate given is monthly directly (which is unlikely for display but let's stick to what was there and clarify)
+                    // The original formula was: loanAmount * (1 + (interestRate * tenure) / (100 * 12));
+                    // This implies interestRate is annual and tenure is monthly, so (interestRate/100) is the annual rate as decimal.
+                    // (interestRate/100) * (tenure/12) is the total interest rate over the period as a decimal.
+                    // So, Total Interest = loanAmount * (interestRate / 100) * (tenure / 12)
+                    // Total Amount = loanAmount + Total Interest
+                    const totalInterest = loanAmount * (interestRate / 100) * (tenure / 12);
+                    const finalTotalAmount = loanAmount + totalInterest;
+                    $('#totalAmount').val(finalTotalAmount.toFixed(2));
+                } else {
+                    $('#totalAmount').val('');
+                }
+            }
+
+            $('#loanApplicationForm').submit(function(event) {
+                // Basic client-side validation example (Bootstrap 5 handles 'required' but you can add more)
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    // Optionally, show a general error message or highlight fields
+                    // For now, Bootstrap's default validation UI will kick in
+                } else {
+                    event.preventDefault(); // Prevent default only if we handle submission via JS
+                    
+                    const loanApplication = {
+                        applicationId: 'L' + Date.now(), // Using timestamp as a simple unique ID, prefixed with 'L'
+                        customerId: $('#customerId').val(),
+                        loanProductName: $('#loanProductName').val(),
+                        interestRate: $('#interestRate').val(),
+                        loanAmount: $('#loanAmount').val(),
+                        tenure: $('#tenure').val(),
+                        totalAmount: $('#totalAmount').val(),
+                        applicationDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                        approvalStatus: 'PENDING'
+                    };
+                    
+                    saveLoanApplication(loanApplication);
+                    // alert('Loan application submitted successfully! Application ID: ' + loanApplication.applicationId);
+
+                    // Redirect to status page (as in original form action)
+                    // This example will simulate the redirection. 
+                    // In a real MVC app, the form submission would go to the controller.
+                    // For pure client-side, you might redirect or update UI.
+                    // window.location.href = $(this).attr('action') + '?applicationId=' + loanApplication.applicationId;
+                    
+                    // For demo, just show success message and reset
+                     // You might want to show a success message in a Bootstrap alert
+                    const successAlertHtml = `
+                        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                            <strong>Success!</strong> Your loan application (ID: ${loanApplication.applicationId}) has been submitted.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                    $(this).before(successAlertHtml); // Add alert before the form
+
+                    $(this).trigger('reset'); // Reset form fields
+                    $('#interestRate').val(''); // Clear readonly fields specifically
+                    $('#totalAmount').val('');
+                    $('#loanProductName').val("").trigger('change'); // Reset select and trigger change if needed
+                }
+                $(this).addClass('was-validated'); // Add class for Bootstrap validation styles
+            });
+
+            function saveLoanApplication(application) {
+                let loanApplications = JSON.parse(localStorage.getItem('loanApplications')) || [];
+                loanApplications.push(application);
+                localStorage.setItem('loanApplications', JSON.stringify(loanApplications));
+                console.log("Saved to localStorage: ", loanApplications);
+            }
+
+            // Initialize Bootstrap tooltips if any are used
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+body {
+    font-family: 'Inter', sans-serif; /* Using Inter font for a modern look, falls back to sans-serif */
+    background-color: #f8f9fa; /* Light gray background for the content area */
+}
+
+/* Navbar styles */
+.navbar {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075); /* Subtle shadow for navbar */
+}
+
+#menu-toggle {
+    transition: all 0.3s;
+}
+#menu-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Card Styles */
+.card {
+    border: none; /* Remove default card borders */
+    border-radius: 0.5rem; /* Rounded corners for cards */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .1); /* Softer shadow for cards */
+    transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    opacity: 0.7;
+}
+
+.card-title-custom {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #6c757d; /* Muted color for card titles */
+    margin-bottom: 0.25rem;
+}
+
+.card-text-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #343a40; /* Dark color for card values */
+}
+
+/* Chart container */
+.chart-container {
+    position: relative;
+    height: 350px; /* Fixed height for chart containers */
+    width: 100%;
+}
+
+/* Table styles */
+.table th {
+    font-weight: 600;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+.table-hover tbody tr:hover {
+    background-color: #e9ecef; /* Light hover for table rows */
+}
+
+/* Status Badges */
+.badge.bg-success-subtle { background-color: #d1e7dd !important; color: #0f5132 !important; }
+.badge.bg-warning-subtle { background-color: #fff3cd !important; color: #664d03 !important; }
+.badge.bg-danger-subtle { background-color: #f8d7da !important; color: #58151c !important; }
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #e9ecef;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}

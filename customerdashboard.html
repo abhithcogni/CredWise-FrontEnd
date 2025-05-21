@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - MyBank</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Modern font, falls back to sans-serif */
+            background-color: #f0f2f5; /* Slightly different light gray for customer view */
+        }
+
+        /* Sidebar Styles - Consistent with admin dashboard but can be tweaked */
+        #sidebar-wrapper {
+            min-height: 100vh;
+            margin-left: -16rem; /* Adjusted width slightly */
+            transition: margin .25s ease-out;
+            background-color: #ffffff; /* White sidebar for a lighter customer feel */
+            border-right: 1px solid #dee2e6; /* Lighter border */
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            padding: 1.5rem 1.25rem;
+            font-size: 1.6rem; /* Slightly larger for brand emphasis */
+            font-weight: bold;
+            color: #0d6efd; /* Primary color for bank name */
+            border-bottom: 1px solid #e9ecef;
+        }
+         #sidebar-wrapper .sidebar-heading i {
+            margin-right: 0.5rem;
+         }
+
+
+        #sidebar-wrapper .list-group-item {
+            padding: 1rem 1.25rem;
+            border: none;
+            color: #495057; /* Darker gray for links for readability on white */
+            background-color: #ffffff;
+            font-weight: 500;
+        }
+
+        #sidebar-wrapper .list-group-item:hover,
+        #sidebar-wrapper .list-group-item.active {
+            color: #0d6efd; /* Primary color for active/hover link */
+            background-color: #e9f5ff; /* Very light blue for active/hover background */
+            border-left: 4px solid #0d6efd;
+            font-weight: 600;
+        }
+        
+        #sidebar-wrapper .list-group-item i {
+            margin-right: 0.85rem;
+            width: 20px; /* Ensure icons align nicely */
+            text-align: center;
+            color: #6c757d; /* Muted icon color */
+        }
+        #sidebar-wrapper .list-group-item.active i,
+        #sidebar-wrapper .list-group-item:hover i {
+            color: #0d6efd; /* Active icon color */
+        }
+
+
+        #page-content-wrapper {
+            min-width: 100vw;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        #wrapper.toggled #page-content-wrapper {
+            min-width: 0;
+            width: 100%;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #ffffff; /* White navbar */
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .05); /* Softer shadow */
+        }
+        #menu-toggle {
+            color: #0d6efd; /* Primary color for toggle button */
+        }
+
+        /* Card Styles */
+        .card {
+            border: 1px solid #e9ecef; /* Subtle border for cards */
+            border-radius: 0.75rem; /* Slightly more rounded corners */
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .04);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .06);
+        }
+        .card-header {
+            background-color: #f8f9fa; /* Light header for cards */
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 600;
+            color: #343a40;
+        }
+        .card-title-custom {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+        .card-text-value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #0d6efd; /* Primary color for main values */
+        }
+        .card-text-value.small {
+            font-size: 1.25rem;
+        }
+        .loan-progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        /* Table styles */
+        .table th {
+            font-weight: 600;
+            color: #495057;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Status Badges */
+        .badge.bg-success-soft { background-color: #d1e7dd; color: #0f5132; }
+        .badge.bg-warning-soft { background-color: #fff3cd; color: #664d03; }
+        .badge.bg-info-soft { background-color: #cff4fc; color: #055160; }
+
+        /* Quick Action Buttons */
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            color: #0d6efd;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .quick-action-btn:hover {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border-color: #0d6efd;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .quick-action-btn i {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .quick-action-btn span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Notification Bell */
+        .notification-bell .badge {
+            font-size: 0.6em;
+            padding: 0.3em 0.5em;
+            position: absolute;
+            top: 8px;
+            right: 0px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #ffffff;
+            padding: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+            }
+            #page-content-wrapper {
+                min-width: 0;
+                width: 100%;
+            }
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -16rem;
+            }
+        }
+        @media (max-width: 767.98px) {
+            .welcome-message h1 {
+                font-size: 1.5rem;
+            }
+            .card-text-value {
+                font-size: 1.5rem;
+            }
+             .quick-action-btn i {
+                font-size: 1.5rem;
+            }
+            .quick-action-btn span {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="fas fa-university"></i>MyBank
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-home"></i>Overview
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-invoice-dollar"></i>My Loans
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-history"></i>Payment History
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-credit-card"></i>Make a Payment
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-hand-holding-usd"></i>Apply for Loan
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user-circle"></i>Profile
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope"></i>Messages <span class="badge bg-danger float-end mt-1">2</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-headset"></i>Support
+                </a>
+            </div>
+            <div class="p-3 mt-auto"> <a href="#" class="btn btn-outline-secondary w-100"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light border-bottom sticky-top">
+                <div class="container-fluid">
+                    <button class="btn btn-link text-decoration-none" id="menu-toggle">
+                        <i class="fas fa-bars fs-4"></i>
+                    </button>
+
+                    <div class="ms-auto d-flex align-items-center">
+                        <a class="nav-link me-3 notification-bell position-relative" href="#" title="Notifications">
+                            <i class="fas fa-bell fs-5 text-secondary"></i>
+                            <span class="badge rounded-pill bg-danger">3</span>
+                        </a>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://placehold.co/32x32/0D6EFD/white?text=JD" class="rounded-circle me-2" alt="User Avatar" style="width: 32px; height: 32px;">
+                                <span class="d-none d-sm-inline">John Doe</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt me-2"></i>Security Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                <div class="welcome-message mb-4">
+                    <h1 class="h3">Welcome back, John!</h1>
+                    <p class="text-muted">Here's a summary of your account activity.</p>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-8">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-file-signature me-2"></i>Active Loan Summary (HL05682)</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View Details</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <div class="card-title-custom">Outstanding Balance</div>
+                                        <div class="card-text-value">$185,750.20</div>
+                                    </div>
+                                    <div class="col-md-4 mb-3 mb-md-0">
+                                        <div class="card-title-custom">Next Payment</div>
+                                        <div class="card-text-value small">$1,250.00</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card-title-custom">Due Date</div>
+                                        <div class="card-text-value small">June 1, 2025</div>
+                                    </div>
+                                </div>
+                                <hr class="my-3">
+                                <div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="small fw-medium">Loan Progress</span>
+                                        <span class="small fw-medium">65% Complete</span>
+                                    </div>
+                                    <div class="progress loan-progress">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <i class="fas fa-bell me-2"></i>Notifications & Alerts
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2 pb-2 border-bottom">
+                                        <a href="#" class="text-decoration-none d-block">
+                                            <strong class="text-primary">Payment Due Soon:</strong> Your next home loan payment is due on June 1, 2025.
+                                            <small class="text-muted d-block">May 15, 2025</small>
+                                        </a>
+                                    </li>
+                                    <li class="mb-2 pb-2 border-bottom">
+                                         <a href="#" class="text-decoration-none d-block">
+                                            <strong class="text-success">New Statement Available:</strong> Your April statement is ready to view.
+                                            <small class="text-muted d-block">May 5, 2025</small>
+                                        </a>
+                                    </li>
+                                    <li>
+                                         <a href="#" class="text-decoration-none d-block">
+                                            <strong class="text-info">Special Offer:</strong> Check out our new low-rate personal loans!
+                                            <small class="text-muted d-block">May 1, 2025</small>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="h5 mb-3">Quick Actions</h2>
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <a href="#" class="quick-action-btn text-center">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Make Payment</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#" class="quick-action-btn text-center">
+                            <i class="fas fa-file-download"></i>
+                            <span>Download Statement</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#" class="quick-action-btn text-center">
+                            <i class="fas fa-comments-dollar"></i>
+                            <span>Request Support</span>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="#" class="quick-action-btn text-center">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Apply New Product</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-receipt me-2"></i>Recent Payment History</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All Payments <i class="fas fa-arrow-right ms-1"></i></a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Amount</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Transaction ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>May 1, 2025</td>
+                                                <td>Home Loan Payment (HL05682)</td>
+                                                <td>$1,250.00</td>
+                                                <td><span class="badge rounded-pill bg-success-soft">Successful</span></td>
+                                                <td><a href="#">TRXN0012345</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>April 1, 2025</td>
+                                                <td>Home Loan Payment (HL05682)</td>
+                                                <td>$1,250.00</td>
+                                                <td><span class="badge rounded-pill bg-success-soft">Successful</span></td>
+                                                <td><a href="#">TRXN0012299</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>March 1, 2025</td>
+                                                <td>Home Loan Payment (HL05682)</td>
+                                                <td>$1,250.00</td>
+                                                <td><span class="badge rounded-pill bg-success-soft">Successful</span></td>
+                                                <td><a href="#">TRXN0012250</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Feb 28, 2025</td>
+                                                <td>Online Transfer to Savings</td>
+                                                <td>$500.00</td>
+                                                <td><span class="badge rounded-pill bg-info-soft">Completed</span></td>
+                                                <td><a href="#">TRXN0012248</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer mt-auto py-3 text-center">
+                <div class="container">
+                    <span>&copy; 2025 MyBank. Member FDIC. Equal Housing Lender.</span>
+                    <div class="mt-2">
+                        <a href="#" class="text-muted small me-2">Privacy Policy</a>
+                        <a href="#" class="text-muted small me-2">Terms of Service</a>
+                        <a href="#" class="text-muted small">Contact Us</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Sidebar Toggle
+            // This function handles the opening and closing of the sidebar navigation.
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault(); // Prevents the default anchor tag behavior.
+                $("#wrapper").toggleClass("toggled"); // Adds or removes the 'toggled' class to the main wrapper.
+                                                     // The CSS handles the actual sliding animation based on this class.
+                // Optional: Change icon on toggle
+                // $(this).find("i").toggleClass("fa-bars fa-times"); // Example if you want to change the icon
+            });
+
+            // Initialize Bootstrap tooltips for any elements that use them.
+            // Tooltips provide helpful information when a user hovers over an element.
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
+            // Active Sidebar Link Handling
+            // This script adds an 'active' class to the clicked sidebar item and removes it from others.
+            // It also updates the main page heading based on the clicked link for a more dynamic feel.
+            $('#sidebar-wrapper .list-group-item').on('click', function(e) {
+                // Don't prevent default if it's an actual link to another page,
+                // but for this demo, we assume it's for SPA-like behavior or just visual state.
+                // e.preventDefault(); // Uncomment if you are loading content dynamically via AJAX
+
+                var currentActive = $('#sidebar-wrapper .list-group-item.active');
+                currentActive.removeClass('active'); // Remove 'active' from the previously active item.
+                $(this).addClass('active'); // Add 'active' to the clicked item.
+
+                // Update the main page title (optional, for demonstration)
+                // This simulates changing content without a full page reload.
+                let pageTitle = $(this).text().trim();
+                if (pageTitle === "Overview") {
+                     $('.welcome-message h1.h3').text('Welcome back, John!'); // Or fetch dynamically
+                } else {
+                     $('.welcome-message h1.h3').text(pageTitle);
+                }
+                // In a real application, you would load new content into the #page-content-wrapper here.
+            });
+
+            // Placeholder for Make a Payment button click
+            // This is where you would typically open a modal or navigate to a payment page.
+            $('.quick-action-btn').filter(function() {
+                return $(this).find('span').text() === 'Make Payment';
+            }).on('click', function(e) {
+                e.preventDefault();
+                // Example: Show a Bootstrap modal
+                // if ($('#paymentModal').length) {
+                //     var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                //     paymentModal.show();
+                // } else {
+                //     alert("Make Payment clicked! Integrate payment flow here.");
+                // }
+                alert("Make Payment clicked! This would typically open a payment form or modal.");
+            });
+
+            // You can add more jQuery interactions here as needed, for example:
+            // - Fetching data via AJAX to update dashboard sections dynamically.
+            // - Handling form submissions for things like profile updates or support requests.
+            // - Implementing interactive charts if you decide to add any (e.g., spending habits).
+        });
+    </script>
+</body>
+</html>
