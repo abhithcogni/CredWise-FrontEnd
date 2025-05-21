@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard with Font Awesome Icons & Canvas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for better spacing and visual appeal */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .icon-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .icon-item:hover {
+            background-color: #e5e7eb; /* Lighter gray on hover */
+        }
+        .icon-item i {
+            font-size: 1.25rem; /* Slightly larger icons */
+            margin-right: 0.75rem;
+            color: #4b5563; /* Darker gray icon color */
+        }
+        .icon-item span {
+            font-weight: 500;
+            color: #374151; /* Darker text color */
+        }
+        canvas {
+            border: 1px solid #d1d5db; /* Light border for the canvas */
+            background-color: #ffffff; /* White canvas background */
+            border-radius: 0.75rem; /* Rounded corners for canvas */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+            width: 100%; /* Make canvas responsive */
+            height: 400px; /* Fixed height for demonstration */
+            display: block; /* Ensure it takes full width */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-4xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Admin Panel</h1>
+
+        <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-1/3 bg-gray-50 p-4 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Navigation</h2>
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-tachometer-alt"></i> <span>Admin Dashboard</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-address-card"></i> <span>KYC Update</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-check-circle"></i> <span>KYC Approval</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-hand-holding-usd"></i> <span>Loan Approval</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-plus-square"></i> <span>Add Loan Products</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-list-alt"></i> <span>View Loan Products</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="icon-item">
+                                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="md:w-2/3 bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Data Visualization Area</h2>
+                <canvas id="myCanvas"></canvas>
+                <p class="text-sm text-gray-500 mt-2">This is a simple canvas demonstrating its use.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the canvas element
+        const canvas = document.getElementById('myCanvas');
+        // Get the 2D rendering context
+        const ctx = canvas.getContext('2d');
+
+        // Function to draw on the canvas
+        function drawCanvasContent() {
+            // Clear the canvas before redrawing
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Set font properties
+            ctx.font = '24px Inter';
+            ctx.fillStyle = '#1f2937'; // Dark gray color
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Draw text in the center of the canvas
+            ctx.fillText('Welcome to your Dashboard!', canvas.width / 2, canvas.height / 2 - 20);
+            ctx.font = '16px Inter';
+            ctx.fillText('This area can be used for charts, graphs, or interactive elements.', canvas.width / 2, canvas.height / 2 + 10);
+        }
+
+        // Function to resize canvas and redraw content
+        function resizeCanvas() {
+            // Set canvas dimensions to match its display size
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawCanvasContent();
+        }
+
+        // Call resizeCanvas initially and on window resize
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+
+    </script>
+</body>
+</html>
